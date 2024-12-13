@@ -86,22 +86,13 @@ jobs:
 
     - name: Run my tests
       run: |
-        yes | sudo apt-get update
-        yes | sudo apt-get install \
-            ca-certificates \
-            curl \
-            gnupg \
-            lsb-release
-
-        yes | sudo mkdir -p /etc/apt/keyrings
-        yes | curl -fsSL https://deb.pkg.kraftkit.sh/gpg.key | \
-          sudo gpg --dearmor -o /etc/apt/keyrings/unikraft.gpg
-
-        yes | echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/unikraft.gpg] https://deb.pkg.kraftkit.sh \
-          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/unikraft.list > /dev/null
-
-        yes | sudo apt-get update
-        yes | sudo apt-get install kraftkit
+        sudo apt-get update -y
+        sudo apt-get install -y ca-certificates curl gnupg lsb-release
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://deb.pkg.kraftkit.sh/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/unikraft.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/unikraft.gpg] https://deb.pkg.kraftkit.sh $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/unikraft.list > /dev/null
+        sudo apt-get update -y
+        sudo apt-get install -y kraftkit
         kraft run -W -p 8080:80 unikraft.org/nginx:1.25
         curl localhost:8080 || exit 1
 
