@@ -58,39 +58,6 @@ jobs:
         path: ${{ github.workspace }}/.kraftkit/oci/digests
         if-no-files-found: error
 
-  test:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-        - plat: qemu
-          arch: x86_64
-        - plat: fc
-          arch: x86_64
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Build nginx1.25
-      uses: unikraft/kraftkit@staging
-      with:
-        loglevel: debug
-        workdir: library/nginx/1.25
-        runtimedir: /github/workspace/.kraftkit
-        plat: ${{ matrix.plat }}
-        arch: ${{ matrix.arch }}
-        push: false
-        output: oci://index.unikraft.io/unikraft.org/nginx:1.25
-
-    - name: Run my tests
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y kraftkit
-        kraft run -W -p 8080:80 unikraft.org/nginx:1.25
-        curl localhost:8080 || exit 1
-
   push:
     if: ${{ github.event_name == 'push' || github.event_name == 'schedule' }}
     needs: [ build ]

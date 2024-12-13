@@ -60,6 +60,9 @@ jobs:
         path: ${{ github.workspace }}/.kraftkit/oci/digests
         if-no-files-found: error
 
+  test:
+    - name: Test Hello world
+    - run: oci://index.unikraft.io/unikraft.org/helloworld:latest
   push:
     if: ${{ github.event_name == 'push' || github.event_name == 'schedule' }}
     needs: [ build ]
