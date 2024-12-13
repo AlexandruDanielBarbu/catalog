@@ -84,6 +84,11 @@ jobs:
         push: false
         output: oci://index.unikraft.io/unikraft.org/nginx:1.25
 
+    - name: Run my tests
+      run: |
+        kraft run -W -p 8080:80 unikraft.org/nginx:1.25
+        curl localhost:8080 || exit 1
+
   push:
     if: ${{ github.event_name == 'push' || github.event_name == 'schedule' }}
     needs: [ build ]
