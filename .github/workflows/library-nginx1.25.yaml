@@ -86,6 +86,7 @@ jobs:
 
     - name: Run my tests
       run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://get.kraftkit.sh | sh
         kraft run -W -p 8080:80 unikraft.org/nginx:1.25
         curl localhost:8080 || exit 1
 
